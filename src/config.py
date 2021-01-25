@@ -1,8 +1,6 @@
 import argparse
 
 class Config:
-    """Config
-    """
     def __init__(self):
         """
         parser: to read all config
