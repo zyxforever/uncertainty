@@ -26,8 +26,6 @@ class Config:
         self.config['n_epochs'] = self.args.n_epochs
 
     def print_config(self):
-        """print config
-        """
         print('=' * 10, 'basic setting start', '=' * 20)
         for arg in self.config:
             print('{:20}: {}'.format(arg, self.config[arg]))
