@@ -24,10 +24,10 @@ class Config:
         self.config['n_epochs'] = self.args.n_epochs
 
     def print_config(self):
-        print('=' * 10, 'basic setting start', '=' * 20)
+        print('>' * 10, 'basic setting start', '>' * 20)
         for arg in self.config:
             print('{:20}: {}'.format(arg, self.config[arg]))
-        print('=' * 10, 'basic setting end', '=' * 20)
+        print('>' * 10, 'basic setting end', '>' * 20)
 
     def get_config(self):
         """return config"""
