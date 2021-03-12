@@ -3,33 +3,40 @@ import torch
 import numpy as np
 import scipy.io as sio
 import torchvision 
-from config import Config
 from torchvision import transforms
 
 class Dataset:
     def __init__(self,config):
         self.config=config
-        self.dataset=self.config["dataset"]
-        self.data_dir=self.config["data_dir"]
-        self.filepath = os.path.join(self.data_dir, self.dataset + ".MAT")
-        self.train_dataset=self.load_data()
-        self.train_loader=self.load_dataloader()
-    def load_data(self):
-        if self.dataset=='mnist':
-            self._load_mnist()
+        
     def load_dataloader(self):
-        return self.train_loader
-    def get_dataloader(self):
+        if self.config.data_set=='mnist':
+            return self._load_mnist()
+        elif self.config.data_set=='cifar10':
+            return self._load_cifar10()
 
+    def _load_cifar10(self):
+        pass 
     def _load_mnist(self):
-        mean, std = 0.13092539, 0.3084483
-        train_transforms=transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((mean,), (std,))
-        ])
-        vec=sio.loadmat(dataset_path)
-        labels=vec['']
-        data=vec['']
+        train_loader = torch.utils.data.DataLoader(
+        torchvision.datasets.MNIST('/home/zyx/datasets', train=True, download=True,
+                       transform=transforms.Compose([
+                           transforms.ToTensor(),
+                           # transforms.Normalize((,), (0.3081,))
+                           #transforms.Normalize((0.1307,), (0.3081,))
+                       ])),
+        batch_size=128, shuffle=True)
+
+        test_loader = torch.utils.data.DataLoader(
+            torchvision.datasets.MNIST('/home/zyx/datasets', train=True, download=True,
+                       transform=transforms.Compose([
+                           transforms.ToTensor(),
+                           # transforms.Normalize((,), (0.3081,))
+                           #transforms.Normalize((0.1307,), (0.3081,))
+                       ])),
+            batch_size=512, shuffle=False)
+        return train_loader,test_loader
+
 
 class SimpleDataset(torch.utils.data.Dataset):
     def __init__(self,data,targets,transform):
