@@ -1,3 +1,4 @@
+from models.mc_dropout_model  import McDropoutModel
 import argparse
 
 def config():
@@ -7,6 +8,8 @@ def config():
     parser.add_argument('--epoch',default=20)
     return parser.parse_args()
 def main():
+    model=McDropoutModel()
     args=config()
+    
 if __name__=='__main__':
     main()
