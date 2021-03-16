@@ -1,6 +1,7 @@
 import torch.nn as nn 
 
 class MCDropoutModel(nn.Module):
+    
     def __init__(self):
         super(MCDropoutModel,self).__init__()
         self.dropout1=nn.Dropout(p=0.5)
@@ -12,8 +13,10 @@ class MCDropoutModel(nn.Module):
         self.dropout4=nn.Dropout(p=0.5)
         self.maxpool2=nn.MaxPool2d(2)
         self.dropout5=nn.Dropout(p=0.5)
-        
-        self.dropout5=nn.Dropout(p=0.5)
+        self.fc1=nn.Linear(512,500)
+        self.dropout6=nn.Dropout(p=0.5)
+        self.fc2=nn.Linear(500,10)
+        self.softmax=nn.Softmax(dim=0)
     def forward(self,x):
         x=self.dropout1(x)
         x=self.conv1(x)
@@ -24,4 +27,9 @@ class MCDropoutModel(nn.Module):
         x=self.dropout4(x)
         x=self.maxpool2(x)
         x=self.dropout5(x)
+        x=x.flatten(start_dim=1)
+        x=self.fc1(x)
+        x=self.dropout6(x)
+        x=self.fc2(x)
+        x=self.softmax(x)
         return x

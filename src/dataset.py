@@ -7,12 +7,12 @@ from torchvision import transforms
 
 class Dataset:
     def __init__(self,config):
-        self.config=config
+        self.cfg=config
         
     def load_dataloader(self):
-        if self.config.data_set=='mnist':
+        if self.cfg.data_set=='mnist':
             return self._load_mnist()
-        elif self.config.data_set=='cifar10':
+        elif self.cfg.data_set=='cifar10':
             return self._load_cifar10()
 
     def _load_cifar10(self):
@@ -25,7 +25,7 @@ class Dataset:
                            # transforms.Normalize((,), (0.3081,))
                            #transforms.Normalize((0.1307,), (0.3081,))
                        ])),
-        batch_size=128, shuffle=True)
+        batch_size=self.cfg.train_batch_size, shuffle=True)
 
         test_loader = torch.utils.data.DataLoader(
             torchvision.datasets.MNIST('/home/zyx/datasets', train=True, download=True,
