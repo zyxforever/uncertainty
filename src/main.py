@@ -20,8 +20,8 @@ def main():
     train_loader,test_loader=Dataset(cfg).load_dataloader()
     for i in range(cfg.epoch):
         for images,labels in train_loader:
-            print(images.shape)
-            print(labels.shape)
+            output=model(images)
+            print(output.shape)
         #print("HelloWorld")
 if __name__=='__main__':
     main()
