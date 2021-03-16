@@ -1,13 +1,14 @@
 
-from mc_dropout_model import MCDropoutModel
+from tqdm import trange,tqdm 
 from dataset import Dataset
+from mc_dropout_model import MCDropoutModel
 
 import torch 
 import torch.nn as nn 
 import logging 
 import argparse
 
-logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s-%(name)s -%(levelname)s-%(message)s')
 logger=logging.getLogger(__name__)
 
 class Trainer:
@@ -33,7 +34,9 @@ class Trainer:
                 output=self.model(images)
                 
     def run(self):
-        for i in range(self.cfg.epoch):
+        pbar=trange(self.cfg.epoch)
+
+        for i in pbar:
             for images,labels in self.train_loader:
                 if self.cfg.cuda:
                     images=images.cuda()
@@ -43,7 +46,7 @@ class Trainer:
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
-                logger.info("loss:{}".format(loss.item()))
+                pbar.set_description("Loss:%-20s"%loss.item())
 if __name__=='__main__':
     trainer=Trainer()
     trainer.run()

@@ -16,7 +16,7 @@ class MCDropoutModel(nn.Module):
         self.fc1=nn.Linear(512,500)
         self.dropout6=nn.Dropout(p=0.5)
         self.fc2=nn.Linear(500,10)
-        self.softmax=nn.Softmax(dim=0)
+        self.softmax=nn.Softmax(dim=1)
     def forward(self,x):
         x=self.dropout1(x)
         x=self.conv1(x)
