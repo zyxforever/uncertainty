@@ -22,8 +22,7 @@ class Dataset:
         torchvision.datasets.MNIST('/home/zyx/datasets', train=True, download=True,
                        transform=transforms.Compose([
                            transforms.ToTensor(),
-                           # transforms.Normalize((,), (0.3081,))
-                           #transforms.Normalize((0.1307,), (0.3081,))
+                           transforms.Normalize((0.1307,), (0.3081,))
                        ])),
         batch_size=self.cfg.train_batch_size, shuffle=True)
 
@@ -32,7 +31,7 @@ class Dataset:
                        transform=transforms.Compose([
                            transforms.ToTensor(),
                            # transforms.Normalize((,), (0.3081,))
-                           #transforms.Normalize((0.1307,), (0.3081,))
+                           transforms.Normalize((0.1307,), (0.3081,))
                        ])),
             batch_size=512, shuffle=False)
         return train_loader,test_loader

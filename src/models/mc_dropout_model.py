@@ -1,7 +1,6 @@
 import torch.nn as nn 
 
 class MCDropoutModel(nn.Module):
-    
     def __init__(self):
         super(MCDropoutModel,self).__init__()
         self.dropout1=nn.Dropout(p=0.5)
