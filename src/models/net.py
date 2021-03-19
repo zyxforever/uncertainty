@@ -52,6 +52,10 @@ class CNN(nn.Module):
             nn.Linear(128,10),
             nn.Softmax(dim=1),
         )
+    def enable_dropout(self):
+        for m in self.modules():
+            if m.__class__.__name__.startswith('Dropout'):
+                m.train()
     def forward(self,x):
         x=self.layer1(x)
         x=self.layer2(x)
