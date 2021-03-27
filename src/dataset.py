@@ -16,7 +16,23 @@ class Dataset:
             return self._load_cifar10()
 
     def _load_cifar10(self):
-        pass 
+        train_loader = torch.utils.data.DataLoader(
+        torchvision.datasets.CIFAR10('/home/zyx/datasets', train=True, download=True,
+                       transform=transforms.Compose([
+                           transforms.ToTensor(),
+                           transforms.Normalize((0.1307,), (0.3081,))
+                       ])),
+        batch_size=self.cfg.train_batch_size, shuffle=True)
+
+        test_loader = torch.utils.data.DataLoader(
+            torchvision.datasets.CIFAR10('/home/zyx/datasets', train=True, download=True,
+                       transform=transforms.Compose([
+                           transforms.ToTensor(),
+                           # transforms.Normalize((,), (0.3081,))
+                           transforms.Normalize((0.1307,), (0.3081,))
+                       ])),
+            batch_size=self.cfg.test_batch_size, shuffle=False)
+        return train_loader,test_loader
     def _load_mnist(self):
         train_loader = torch.utils.data.DataLoader(
         torchvision.datasets.MNIST('/home/zyx/datasets', train=True, download=True,

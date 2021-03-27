@@ -50,7 +50,8 @@ def cal_ber (data, label, s=10):
     for i in range(len(cluster_list)):
         confi_index.extend(cluster_list[i])
         cencter_matrix[i,:] = cluster_centers[i]
-        cencter_label.append(label[cluster_list[i][0]][0])
+        t=label[cluster_list[i][0]]
+        cencter_label.append(t)
     nonconfi_index = list(set(np.arange(len(label)))-set(confi_index))
     ### employ clusting method to recgonize cluster
     D = []
@@ -63,7 +64,7 @@ def cal_ber (data, label, s=10):
         for j in i_index:
             temp.extend(cluster_list[j])
         D.append(temp) 
-        L.append(label[temp[0]][0])
+        L.append(label[temp[0]])
     ### first round distillation--Knn query
     new_confi = []
     for i in range(len(L)):

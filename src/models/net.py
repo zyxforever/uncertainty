@@ -42,13 +42,17 @@ class CNN(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2,stride=2)
         )
-        self.fc=nn.Sequential(
+
+        self.fc1=nn.Sequential(
             nn.Linear(128*4*4,1024),
             nn.ReLU(inplace=True),
             nn.Dropout2d(0.2),
             nn.Linear(1024,128),
             nn.Dropout2d(0.2),
-            nn.ReLU(inplace=True),
+            nn.ReLU(inplace=True)
+        )
+    
+        self.fc=nn.Sequential(
             nn.Linear(128,10),
             nn.Softmax(dim=1),
         )
@@ -60,10 +64,13 @@ class CNN(nn.Module):
         x=self.layer1(x)
         x=self.layer2(x)
         x=self.layer3(x)
+        #feature=x.view(x.size(0),-1)
         x=self.layer4(x)
         x=x.view(x.size(0),-1)
+        x=self.fc1(x)
+        feature=x
         x=self.fc(x)
-        return x 
+        return x,feature
 
 class DropoutModel(nn.Module):
     def __init__(self):
