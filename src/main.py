@@ -1,10 +1,9 @@
 
 from tqdm import trange,tqdm 
 from dataset import Dataset
-from models.net import CNN
 from sklearn.metrics import accuracy_score
 from algorithms.function import cal_ber
-from models.mc_dropout_model import MCDropoutModel
+from models import get_model
 import torch 
 import numpy as np 
 import logging 
@@ -24,26 +23,22 @@ class Trainer:
         self.cfg=self.config()
         self.pbar=trange(self.cfg.epoch)
         print(self.cfg.model)
-        self.model=self.get_model(self.cfg.model)()
+        self.model=get_model(self.cfg.model)
         self.criterion=nn.CrossEntropyLoss()
         self.train_loader,self.test_loader=Dataset(self.cfg).load_dataloader()
-        self.optimizer=torch.optim.SGD(self.model.parameters(),lr=self.cfg.learning_rate)
+        self.optimizer=torch.optim.SGD(self.model.parameters(),lr=self.cfg.lr)
         if self.cfg.cuda:
             self.model=self.model.cuda()
-    def get_model(self,name):
-        return {
-            "cnn":CNN,
-            "dropout":MCDropoutModel
-        }[name]
+
     def config(self):
         parser = argparse.ArgumentParser(description='uncertainty')
         parser.add_argument('--dataset_path',default='/home/zyx/datasets')
-        parser.add_argument('--model',default='cnn', choices=['cnn', 'dropout', 'scissors'])
-        parser.add_argument('--data_set',default='mnist')
+        parser.add_argument('--model',default='mcdropout', choices=['cnn', 'mcdropout', 'scissors'])
+        parser.add_argument('--data_set',default='cifar10')
         parser.add_argument('--train_batch_size',default=128)
         parser.add_argument('--test_batch_size',default=512)
         parser.add_argument('--epoch',default=50)
-        parser.add_argument('--learning_rate',default=1e-2)
+        parser.add_argument('--lr',default=1e-2)
         parser.add_argument('--cuda',default=True)
         return parser.parse_args()
     def uncertainty(self):

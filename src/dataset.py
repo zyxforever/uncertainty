@@ -20,7 +20,7 @@ class Dataset:
         torchvision.datasets.CIFAR10('/home/zyx/datasets', train=True, download=True,
                        transform=transforms.Compose([
                            transforms.ToTensor(),
-                           transforms.Normalize((0.1307,), (0.3081,))
+                           transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
                        ])),
         batch_size=self.cfg.train_batch_size, shuffle=True)
 
@@ -29,7 +29,7 @@ class Dataset:
                        transform=transforms.Compose([
                            transforms.ToTensor(),
                            # transforms.Normalize((,), (0.3081,))
-                           transforms.Normalize((0.1307,), (0.3081,))
+                           transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))
                        ])),
             batch_size=self.cfg.test_batch_size, shuffle=False)
         return train_loader,test_loader

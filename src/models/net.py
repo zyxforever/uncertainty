@@ -72,9 +72,52 @@ class CNN(nn.Module):
         x=self.fc(x)
         return x,feature
 
-class DropoutModel(nn.Module):
+class MCDropoutModel(CNN):
     def __init__(self):
-        
-        pass 
+        super(MCDropoutModel,self).__init__()
+        self.layer1=nn.Sequential(
+            nn.Conv2d(3,64,kernel_size=3),
+            nn.ReLU(inplace=True),
+            nn.Dropout2d(0.5),
+            nn.MaxPool2d(1,stride=2)
+        )
+        self.layer2=nn.Sequential(
+            nn.Conv2d(64,128,kernel_size=3),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.5),
+            nn.MaxPool2d(1)
+        )
+
+        self.layer3=nn.Sequential(
+            nn.Conv2d(128,256,kernel_size=3),
+            nn.Dropout(0.5),
+            nn.AvgPool2d(kernel_size=1)
+        )
+
+        self.fc1=nn.Sequential(
+            nn.Linear(256,1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.5),
+
+        )
+
+        self.fc2=nn.Sequential(
+            nn.Linear(1024,256),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.5),
+
+        )
+        self.fc=nn.Sequential(
+            nn.Linear(256,10),
+            nn.Softmax(dim=1),
+        )
+    def forward(self,x):
+        x=self.layer1(x)
+        x=self.layer2(x)
+        x=self.layer3(x)
+        x=self.fc1(x)
+        x=self.fc2(x)
+        x=fc(x)
+        return x 
 if __name__=='__main__':
-    model=DropoutModel()
+    model=MCDropoutModel()
