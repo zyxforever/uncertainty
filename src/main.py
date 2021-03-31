@@ -23,7 +23,7 @@ class Trainer:
         self.cfg=self.config()
         self.pbar=trange(self.cfg.epoch)
         print(self.cfg.model)
-        self.model=get_model(self.cfg.model)
+        self.model=get_model(self.cfg.model)(self.cfg)
         self.criterion=nn.CrossEntropyLoss()
         self.train_loader,self.test_loader=Dataset(self.cfg).load_dataloader()
         self.optimizer=torch.optim.SGD(self.model.parameters(),lr=self.cfg.lr)
@@ -33,10 +33,11 @@ class Trainer:
     def config(self):
         parser = argparse.ArgumentParser(description='uncertainty')
         parser.add_argument('--dataset_path',default='/home/zyx/datasets')
-        parser.add_argument('--model',default='mcdropout', choices=['cnn', 'mcdropout', 'scissors'])
+        parser.add_argument('--model',default='cnn', choices=['cnn', 'mcdropout', 'scissors'])
         parser.add_argument('--data_set',default='cifar10')
         parser.add_argument('--train_batch_size',default=128)
         parser.add_argument('--test_batch_size',default=512)
+        parser.add_argument('--in_channels',default=3)
         parser.add_argument('--epoch',default=50)
         parser.add_argument('--lr',default=1e-2)
         parser.add_argument('--cuda',default=True)
@@ -75,7 +76,6 @@ class Trainer:
         for i in self.pbar:
             input_ = []
             label_ = []
-
             pred_list=np.array([])
             label_list=np.array([])
             for images,labels in self.train_loader:
@@ -98,7 +98,7 @@ class Trainer:
             inputs_ = np.array(input_)
             label_   = np.array(label_)
             self.evaluate()
-            logger.info(cal_ber(inputs_,label_,10))
+            logger.info("qiang_index%s"%cal_ber(inputs_,label_,10))
             #self.uncertainty()
 if __name__=='__main__':
     trainer=Trainer()

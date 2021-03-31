@@ -13,10 +13,11 @@ from torchvision.datasets.mnist import MNIST
     2 With dropout: [99.133,99.608],with softmax 
 '''
 class CNN(nn.Module):
-    def __init__(self):
+    def __init__(self,cfg):
         super(CNN,self).__init__()
+        self.cfg=cfg
         self.layer1=nn.Sequential(
-            nn.Conv2d(1,16,kernel_size=3),
+            nn.Conv2d(self.cfg.in_channels,16,kernel_size=3),
             #nn.BatchNorm2d(16),
             nn.Dropout2d(0.2),
             nn.ReLU(inplace=True)
@@ -95,7 +96,7 @@ class MCDropoutModel(CNN):
         )
 
         self.fc1=nn.Sequential(
-            nn.Linear(256,1024),
+            nn.Linear(256*11*11,1024),
             nn.ReLU(inplace=True),
             nn.Dropout(0.5),
 
@@ -115,9 +116,10 @@ class MCDropoutModel(CNN):
         x=self.layer1(x)
         x=self.layer2(x)
         x=self.layer3(x)
+        x=x.view(x.size(0),-1)
         x=self.fc1(x)
-        x=self.fc2(x)
-        x=fc(x)
-        return x 
+        feature=self.fc2(x)
+        x=self.fc(feature)
+        return x,feature
 if __name__=='__main__':
     model=MCDropoutModel()

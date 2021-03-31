@@ -25,7 +25,7 @@ class Dataset:
         batch_size=self.cfg.train_batch_size, shuffle=True)
 
         test_loader = torch.utils.data.DataLoader(
-            torchvision.datasets.CIFAR10('/home/zyx/datasets', train=True, download=True,
+            torchvision.datasets.CIFAR10('/home/zyx/datasets', train=False, download=True,
                        transform=transforms.Compose([
                            transforms.ToTensor(),
                            # transforms.Normalize((,), (0.3081,))
@@ -43,7 +43,7 @@ class Dataset:
         batch_size=self.cfg.train_batch_size, shuffle=True)
 
         test_loader = torch.utils.data.DataLoader(
-            torchvision.datasets.MNIST('/home/zyx/datasets', train=True, download=True,
+            torchvision.datasets.MNIST('/home/zyx/datasets', train=False, download=True,
                        transform=transforms.Compose([
                            transforms.ToTensor(),
                            # transforms.Normalize((,), (0.3081,))
